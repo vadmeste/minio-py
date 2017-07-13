@@ -1553,7 +1553,6 @@ class Minio(object):
 
         # Run parts upload in parallel
         pool.parallel_run(self._upload_part_routine, parts_to_upload)
-        # pool.wait_completion()
 
         # Update uploaded_parts with the part uploads result
         # and check total uploaded data.
