@@ -15,10 +15,10 @@
 # limitations under the License.
 
 """
-minio.thread_pool
+minio.tasks_pool
 ~~~~~~~~~~~~
 
-This module implements a thread pool API to run several tasks
+This module implements a tasks pool API to run several tasks
 in parallel. Tasks results can also be retrieved.
 
 :copyright: (c) 2017 by Minio, Inc.
@@ -30,7 +30,7 @@ import sys
 from threading import Thread
 from .compat import queue
 
-class Worker_py2(Thread):
+class Worker(Thread):
     """ Thread executing tasks from a given tasks queue """
     def __init__(self, tasks_queue, results_queue):
         Thread.__init__(self)
@@ -54,13 +54,13 @@ class Worker_py2(Thread):
             self.tasks_queue.task_done()
 
 
-class ThreadPool_py2:
+class TasksPool_threading:
     """ Pool of threads consuming tasks from a queue """
     def __init__(self, num_threads):
         self.results_queue = queue()
         self.tasks_queue = queue(num_threads)
         for _ in range(num_threads):
-            Worker_py2(self.tasks_queue, self.results_queue)
+            Worker(self.tasks_queue, self.results_queue)
 
     def add_task(self, func, *args, **kargs):
         """ Add a task to the queue """

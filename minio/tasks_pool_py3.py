@@ -15,11 +15,11 @@
 # limitations under the License.
 
 """
-minio.thread_pool
+minio.tasks_pool
 ~~~~~~~~~~~~
 
 This module implements a thread pool API to run several tasks
-in parallel. Tasks results can also be retrieved.
+using asyncio module. Tasks results can also be retrieved.
 
 :copyright: (c) 2017 by Minio, Inc.
 :license: Apache 2.0, see LICENSE for more details.
@@ -39,12 +39,12 @@ async def do_work(loop, executor, work_queue, result_queue):
         r = await loop.run_in_executor(executor, func, *args, **kargs)
         result_queue.put(r)
 
-class ThreadPool_py3:
-    """ Pool of threads consuming tasks from a queue """
-    def __init__(self, num_threads):
+class TasksPool_asyncio:
+    """ Pool of workers consuming tasks from a queue """
+    def __init__(self, num_workers):
         self.tasks_queue = asyncio.Queue()
         self.results_queue = queue()
-        self.num_threads = num_threads
+        self.num_workers = num_workers
 
     def add_task(self, func, *args, **kargs):
         """ Add a task to the queue """
@@ -57,7 +57,7 @@ class ThreadPool_py3:
         loop = asyncio.get_event_loop()
         executor = ThreadPoolExecutor(max_workers=1)
         async_tasks = []
-        for i in range(1, self.num_threads):
+        for i in range(1, self.num_workers):
             async_tasks.append(asyncio.async(do_work(loop, executor, self.tasks_queue, self.results_queue)))
         loop.run_until_complete(asyncio.wait(async_tasks))
 

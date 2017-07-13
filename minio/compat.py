@@ -37,8 +37,8 @@ if _is_py2:
     from Queue import Queue
     queue = Queue
 
-    from .thread_pool import ThreadPool_py2
-    tp = ThreadPool_py2
+    from .tasks_pool_py2 import TasksPool_threading
+    tp = TasksPool_threading
 
     from urllib import quote
     _urlencode = quote
@@ -65,8 +65,8 @@ elif _is_py3:
     from queue import Queue
     queue = Queue
 
-    from .thread_pool_py3 import ThreadPool_py3
-    tp = ThreadPool_py3
+    from .tasks_pool_py3 import TasksPool_asyncio
+    tp = TasksPool_asyncio
 
     from urllib.request import quote
     _urlencode = quote
