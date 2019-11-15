@@ -25,13 +25,13 @@ and API specific errors.
 :license: Apache 2.0, see LICENSE for more details.
 
 """
-from xml.etree import cElementTree
-from xml.etree.cElementTree import ParseError
+
+from defusedxml import cElementTree
 
 if hasattr(cElementTree, 'ParseError'):
-    ETREE_EXCEPTIONS = (ParseError, AttributeError, ValueError, TypeError)
+    XML_EXCEPTIONS = (ParseError, AttributeError, ValueError, TypeError)
 else:
-    ETREE_EXCEPTIONS = (SyntaxError, AttributeError, ValueError, TypeError)
+    XML_EXCEPTIONS = (SyntaxError, AttributeError, ValueError, TypeError)
 
 
 class MinioError(Exception):
@@ -173,7 +173,7 @@ class ResponseError(MinioError):
             raise ValueError('response data has no body.')
         try:
             root = cElementTree.fromstring(self._response.data)
-        except ETREE_EXCEPTIONS as error:
+        except XML_EXCEPTIONS as error:
             raise InvalidXMLError('"Error" XML is not parsable. '
                                   'Message: {0}'.format(error))
         for attribute in root:

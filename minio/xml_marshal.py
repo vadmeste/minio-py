@@ -28,7 +28,7 @@ This module contains the simple wrappers for XML marshaller's.
 from __future__ import absolute_import
 import io
 
-from xml.etree import ElementTree as s3_xml
+from defusedxml import ElementTree as s3_xml
 
 _S3_NAMESPACE = 'http://s3.amazonaws.com/doc/2006-03-01/'
 

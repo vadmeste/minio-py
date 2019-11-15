@@ -31,8 +31,7 @@ import io
 import sys
 
 from binascii import crc32
-from xml.etree import cElementTree
-from xml.etree.cElementTree import ParseError
+from defusedxml import cElementTree
 
 from .helpers import (EVENT_RECORDS, EVENT_PROGRESS,
                       EVENT_STATS, EVENT_CONT,

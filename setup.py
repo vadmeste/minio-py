@@ -46,6 +46,7 @@ requires = [
     'pytz',
     'certifi',
     'python-dateutil',
+    'defusedxml',
 ]
 
 tests_requires = [

@@ -25,16 +25,15 @@ This module contains core API parsers.
 """
 
 # standard.
-from xml.etree import cElementTree
-from xml.etree.cElementTree import ParseError
-
 from datetime import datetime
 
 # dependencies.
+from defusedxml import cElementTree
+
 import pytz
 
 # minio specific.
-from .error import (ETREE_EXCEPTIONS, InvalidXMLError, MultiDeleteError)
+from .error import (XML_EXCEPTIONS, InvalidXMLError, MultiDeleteError)
 from .compat import urldecode
 from .definitions import (Object, Bucket, IncompleteUpload,
                           UploadPart, MultipartUploadResult,
@@ -65,7 +64,7 @@ class S3Element(object):
         """
         try:
             return cls(root_name, cElementTree.fromstring(data.strip()))
-        except ETREE_EXCEPTIONS as error:
+        except XML_EXCEPTIONS as error:
             raise InvalidXMLError(
                 '"{}" XML is not parsable. Message: {}'.format(
                     root_name, error
@@ -97,7 +96,7 @@ class S3Element(object):
         if strict:
             try:
                 return self.element.find('s3:{}'.format(name), _S3_NS).text
-            except ETREE_EXCEPTIONS as error:
+            except XML_EXCEPTIONS as error:
                 raise InvalidXMLError(
                     ('Invalid XML provided for "{}" - erroring tag <{}>. '
                      'Message: {}').format(self.root_name, name, error)
